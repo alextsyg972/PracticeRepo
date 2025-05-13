@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @KafkaListener(topics = "sent_orders")
-public class OrderCreatedEventHandler {
+public class OrderShippedEventHandler {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     private NotificationService notificationService;
 
     @Autowired
-    public OrderCreatedEventHandler(NotificationService notificationService) {
+    public OrderShippedEventHandler(NotificationService notificationService) {
         this.notificationService = notificationService;
     }
 
