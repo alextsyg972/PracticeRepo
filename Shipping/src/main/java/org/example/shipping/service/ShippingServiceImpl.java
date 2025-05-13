@@ -13,20 +13,18 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class ShippingServiceImpl implements ShippingService {
 
-    private KafkaTemplate<String, OrderCreatedEvent> kafkaTemplate;
+    private KafkaTemplate<String, Object> kafkaTemplate;
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public ShippingServiceImpl(KafkaTemplate<String, OrderCreatedEvent> kafkaTemplate) {
+    public ShippingServiceImpl(KafkaTemplate<String, Object> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
     @Override
     public void shipment(OrderCreatedEvent orderCreatedEvent) {
-
         orderCreatedEvent.setStatus("SHIPPING");
-
-        CompletableFuture<SendResult<String, OrderCreatedEvent>> future = kafkaTemplate.send("sent_orders",orderCreatedEvent.getId(), orderCreatedEvent);
+        CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send("sent_orders", orderCreatedEvent.getId(), orderCreatedEvent);
         future.whenComplete((result, ex) -> {
             if (ex != null) {
                 LOGGER.error("Failed to send message: {}", ex.getMessage());
@@ -34,5 +32,6 @@ public class ShippingServiceImpl implements ShippingService {
                 LOGGER.info("Message sent successfully {}", result.getRecordMetadata());
             }
         });
+
     }
 }

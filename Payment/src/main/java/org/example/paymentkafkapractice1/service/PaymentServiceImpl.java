@@ -13,20 +13,19 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class PaymentServiceImpl implements PaymentService {
 
-    private KafkaTemplate<String, OrderCreatedEvent> kafkaTemplate;
+    private KafkaTemplate<String, Object> kafkaTemplate;
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public PaymentServiceImpl(KafkaTemplate<String, OrderCreatedEvent> kafkaTemplate) {
+    public PaymentServiceImpl(KafkaTemplate<String, Object> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
     @Override
     public void payment(OrderCreatedEvent orderCreatedEvent) {
-
         orderCreatedEvent.setStatus("PAID");
 
-        CompletableFuture<SendResult<String, OrderCreatedEvent>> future = kafkaTemplate.send("payed_orders",orderCreatedEvent.getId(), orderCreatedEvent);
+        CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send("payed_orders", orderCreatedEvent.getId(), orderCreatedEvent);
         future.whenComplete((result, ex) -> {
             if (ex != null) {
                 LOGGER.error("Failed to send message: {}", ex.getMessage());

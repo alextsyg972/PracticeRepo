@@ -25,17 +25,17 @@ public class KafkaTopicConfig {
 
     @Bean
     public NewTopic createOrderTopic() {
-        return new NewTopic("new_orders", 1, (short) 1);
+        return new NewTopic("new_orders", 5, (short) 1);
     }
 
     @Bean
     public NewTopic createPayedTopic() {
-        return new NewTopic("payed_orders", 1, (short) 1);
+        return new NewTopic("payed_orders", 5, (short) 1);
     }
 
     @Bean
     public NewTopic createSentTopic() {
-        return new NewTopic("sent_orders", 1, (short) 1);
+        return new NewTopic("sent_orders", 5, (short) 1);
     }
 
 

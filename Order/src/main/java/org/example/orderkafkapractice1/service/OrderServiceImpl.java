@@ -32,7 +32,7 @@ public class OrderServiceImpl implements OrderService {
         OrderCreatedEvent orderCreatedEvent = new OrderCreatedEvent(productId, order.getName(),
                 order.getPrice(), order.getAmount(), "CREATED");
 
-        CompletableFuture<SendResult<String, OrderCreatedEvent>> future = kafkaTemplate.send("new_orders",productId, orderCreatedEvent);
+        CompletableFuture<SendResult<String, OrderCreatedEvent>> future = kafkaTemplate.send("new_orders", productId, orderCreatedEvent);
         future.whenComplete((result, ex) -> {
             if (ex != null) {
                 LOGGER.error("Failed to send message: {}", ex.getMessage());
